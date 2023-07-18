@@ -1,0 +1,28 @@
+{
+  "name": "tictactoegame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomicfoundation/hardhat-verify": "^1.0.3",
+    "@types/crypto-js": "^4.1.1",
+    "@types/ethereumjs-abi": "^0.6.3",
+    "ethereumjs-abi": "^0.6.8",
+    "hardhat": "^2.14.0",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^1.0.9"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.3",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.3.1",
+    "ethereumjs-wallet": "^1.0.2",
+    "prompt-confirm": "^2.0.4"
+  }
+}
