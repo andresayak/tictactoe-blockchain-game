@@ -5,7 +5,9 @@ import "./interfaces/IERC20.sol";
 import "./IGame.sol";
 
 contract TicTacToeERC20 is IGame {
-    enum GameStatus{WAIT, PROGRESS, FINISHED}
+    uint16 public constant GAME_TYPE = 0;
+
+    enum GameStatus{WAIT, PROGRESS, FINISHED, CANCELED}
     enum Side{NONE, PLAYER1, PLAYER2}
 
     address public immutable factory;
@@ -15,6 +17,7 @@ contract TicTacToeERC20 is IGame {
     uint public size;
     uint public turnNumber;
     uint public lastStepTime;
+    uint public createdTime;
     address public player1;
     address public player2;
     Side public winner = Side.NONE;
@@ -24,7 +27,7 @@ contract TicTacToeERC20 is IGame {
     mapping(uint8 => mapping(uint8 => Side)) public board;
 
     event GameStart(address player2, uint8 row, uint8 col);
-    event MoveMade(Side side, uint8 row, uint8 col);
+    event GameStep(Side side, uint8 row, uint8 col);
     event GameEnded(Side side, uint256 amountWon);
 
     modifier onlyPlayers() {
@@ -40,6 +43,7 @@ contract TicTacToeERC20 is IGame {
 
     constructor(address _factory){
         factory = _factory;
+        createdTime = block.timestamp;
     }
 
     function init(uint _timeoutTime, address _token, uint _coins, uint _size) external {
@@ -56,6 +60,14 @@ contract TicTacToeERC20 is IGame {
         assert(IERC20(token).transferFrom(msg.sender, address(this), coins));
         player2 = msg.sender;
         status = GameStatus.PROGRESS;
+        lastStepTime = block.timestamp;
+    }
+
+    function cancel() external {
+        require(msg.sender == player1, "Only creator can cancel game");
+        require(status == GameStatus.WAIT, "Game has started");
+        assert(IERC20(token).transfer(msg.sender, coins));
+        status = GameStatus.CANCELED;
     }
 
     function timeout() duringGame external {
@@ -64,16 +76,16 @@ contract TicTacToeERC20 is IGame {
         endGame();
     }
 
-    function step(uint8 row, uint8 col) external duringGame onlyPlayers {
-        require(row < size && col < size, "Invalid row or column");
-        require(board[row][col] == Side.NONE, "Cell already occupied");
+    function step(uint8 _row, uint8 _col) external duringGame onlyPlayers {
+        require(_row < size && _col < size, "Invalid row or column");
+        require(board[_row][_col] == Side.NONE, "Cell already occupied");
         Side _side = (msg.sender == player1) ? Side.PLAYER1 : Side.PLAYER2;
         require(currentTurn == _side, "Not your turn");
 
-        board[row][col] = _side;
+        board[_row][_col] = _side;
         lastStepTime = block.timestamp;
 
-        emit MoveMade(_side, row, col);
+        emit GameStep(_side, _row, _col);
 
         if (checkWinner()) {
             endGame();
@@ -88,11 +100,11 @@ contract TicTacToeERC20 is IGame {
     function checkWinner() internal returns (bool) {
         for (uint8 i = 0; i < size - 2; i++) {
             for (uint8 j = 0; j < size - 2; j++) {
-                if(board[i][j] != Side.NONE){
-                    if ((board[i][j] == board[i][j+1] && board[i][j] == board[i][j+2])
-                        || (board[i][j] == board[i+1][j] && board[i][j] == board[i+2][j])
-                        || (board[i][j] == board[i+1][j+1] && board[i][j] == board[i+2][j+2])
-                        || (i > 1 && j > 1 && board[i][j] == board[i-1][j-1] && board[i][j] == board[i-2][j-2])
+                if (board[i][j] != Side.NONE) {
+                    if ((board[i][j] == board[i][j + 1] && board[i][j] == board[i][j + 2])
+                    || (board[i][j] == board[i + 1][j] && board[i][j] == board[i + 2][j])
+                    || (board[i][j] == board[i + 1][j + 1] && board[i][j] == board[i + 2][j + 2])
+                        || (i > 1 && j > 1 && board[i][j] == board[i - 1][j - 1] && board[i][j] == board[i - 2][j - 2])
                     ) {
                         winner = board[i][j];
                         return true;
@@ -115,5 +127,9 @@ contract TicTacToeERC20 is IGame {
             assert(IERC20(token).transfer(player2, coins));
             emit GameEnded(Side.NONE, 0);
         }
+    }
+
+    function currentTime() external returns (uint256){
+        return block.timestamp;
     }
 }

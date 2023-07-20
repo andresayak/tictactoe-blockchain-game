@@ -1,9 +1,9 @@
-import {loadFixture} from "@nomicfoundation/hardhat-network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import {BigNumber} from "ethers";
+import { BigNumber } from "ethers";
 
-describe("TickTacToe", function () {
+describe("TickTacToe", function() {
 
   async function deployFixture() {
     const [owner, user1, user2] = await ethers.getSigners();
@@ -18,17 +18,17 @@ describe("TickTacToe", function () {
     await tokenContract.transfer(user2.address, coins);
     await tokenContract.connect(user1).approve(factoryContract.address, coins);
     const createGameTx = await factoryContract.connect(user1)
-        .createGame(120, tokenContract.address, coins, 100);
+      .createGame(120, tokenContract.address, coins, 100);
     const createGameReceipt = await createGameTx.wait();
 
-    const event  = createGameReceipt.events?.find(event => event.event == 'GameCreated');
+    const event = createGameReceipt.events?.find(event => event.event == "GameCreated");
     expect(event).to.not.false;
     const gameContract = await ethers.getContractAt("TicTacToeERC20", event?.args?.game);
-    return {tokenContract, gameContract, coins};
+    return { tokenContract, gameContract, coins };
   }
 
-  describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
+  describe("Deployment", function() {
+    it("Should set the right unlockTime", async function() {
       const [owner, user1, user2] = await ethers.getSigners();
       const { tokenContract, gameContract, coins } = await loadFixture(deployFixture);
 
@@ -36,9 +36,8 @@ describe("TickTacToe", function () {
 
       await tokenContract.connect(user2).approve(gameContract.address, 10);
       await gameContract.connect(user2).start();
-      await expect(gameContract.connect(user2).start()).to.revertedWith('Game has started');
+      await expect(gameContract.connect(user2).start()).to.revertedWith("Game has started");
 
-      console.log('coins', coins*2, await tokenContract.balanceOf(gameContract.address));
       expect(await tokenContract.balanceOf(gameContract.address)).to.equal(coins * 2);
       expect(await gameContract.status()).to.equal(1);
       expect(await gameContract.player1()).to.equal(user1.address);
@@ -50,7 +49,7 @@ describe("TickTacToe", function () {
       expect(await gameContract.currentTurn()).to.equal(2);
       expect(await gameContract.turnNumber()).to.equal(1);
 
-      await expect(gameContract.connect(user2).step(0, 0)).to.revertedWith('Cell already occupied');
+      await expect(gameContract.connect(user2).step(0, 0)).to.revertedWith("Cell already occupied");
       await gameContract.connect(user2).step(0, 1);
       expect(await gameContract.currentTurn()).to.equal(1);
       expect(await gameContract.turnNumber()).to.equal(2);
