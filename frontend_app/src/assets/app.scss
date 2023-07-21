@@ -1,3 +1,16 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import 'react-toastify/dist/ReactToastify.css';
 
+.blocNumber{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-size: small;
+  background: $info;
+  padding: 2px 10px;
+  opacity: 0.4;
+  border-radius: 4px 0 0 0;
+}
+.blocNumber:hover{
+  opacity: 1;
+}

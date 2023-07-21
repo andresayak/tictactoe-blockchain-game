@@ -6,9 +6,9 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "uint16",
           "name": "_timeoutTime",
-          "type": "uint256"
+          "type": "uint16"
         },
         {
           "internalType": "address",
@@ -21,9 +21,9 @@
           "type": "uint256"
         },
         {
-          "internalType": "uint256",
+          "internalType": "uint8",
           "name": "_size",
-          "type": "uint256"
+          "type": "uint8"
         }
       ],
       "name": "init",

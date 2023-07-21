@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { loaderStart, loaderStop, loaderProgress, systemMainFetch } from "../redux/actions/systemActions";
+import { useEthers } from "@usedapp/core";
 
 const Component = (props: any) => {
+  const { library, account, chainId } = useEthers();
   const { loaderStart, systemMainFetch, loaderProgress, loaderStop, loader, loader_progress } = props;
   useEffect(() => {
     const speed = 500;
     if (!props.loaded) {
       const attem = () => {
         loaderStart();
-        systemMainFetch().then(() => {
+        systemMainFetch(chainId).then(() => {
           loaderProgress(50);
           setTimeout(() => {
             setTimeout(() => {
@@ -46,7 +48,7 @@ const Connected = connect((store: any) => ({
   loaderStart: () => loaderStart(dispatch),
   loaderStop: () => loaderStop(dispatch),
   loaderProgress: (progress: number) => loaderProgress(dispatch, progress),
-  systemMainFetch: () => systemMainFetch(dispatch),
+  systemMainFetch: (chainId:number) => systemMainFetch(dispatch, chainId),
 }))(Component);
 
 const LandingLayout = (props: any) => {

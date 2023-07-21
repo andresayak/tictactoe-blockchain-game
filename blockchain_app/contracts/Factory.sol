@@ -9,15 +9,22 @@ import "./utils/Context.sol";
 
 contract Factory is Ownable {
     IGame[] public games;
+    address public immutable treasury;
+    uint8 public immutable fee;
 
     event GameCreated(address game, address creator);
+
+    constructor(address _treasury, uint8 _fee){
+        treasury = _treasury;
+        fee = _fee;
+    }
 
     function _msgSender() internal view override(Context) returns (address) {
         return Context._msgSender();
     }
 
-    function createGame(uint _timeoutTime, address _token, uint _coins, uint _size) public returns(address) {
-        IGame game = (new TicTacToeERC20(address(this)));
+    function createGame(uint16 _timeoutTime, address _token, uint _coins, uint8 _size) public returns(address) {
+        IGame game = (new TicTacToeERC20(address(this), treasury, fee));
         game.init(_timeoutTime, _token, _coins, _size);
         games.push(game);
 

@@ -67,6 +67,7 @@ export const TokenWrap = (props: {
         });
       }
     } catch (e: unknown) {
+      console.log(e);
       if (e && e.toString().match(/call revert exception/)) {
         setErrors({ tokenAddress: ["Invalid token address"] });
       }

@@ -16,7 +16,7 @@ const Component = (props: any) => {
       </Container>
     </div>
     <Footer/>
-    blockNumber: {blockNumber}
+    <div className="blocNumber">blockNumber: {blockNumber}</div>
   </Wrap>;
 };
 

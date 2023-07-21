@@ -1,28 +1,22 @@
 import { useContractFunction, useEthers } from "@usedapp/core";
 import React, { useCallback, useMemo, useState } from "react";
-import { BigNumber, Contract } from "ethers";
-import FactoryAbi from "../../contracts/Factory.sol/Factory.json";
+import { Contract } from "ethers";
+import TicTacToeERC20 from "../../contracts/TicTacToeERC20.sol/TicTacToeERC20.json";
 import { toast } from "react-toastify";
 import { Button } from "reactstrap";
-import { LogDescription } from "ethers/lib/utils";
+import { GameType } from "../../types/game";
 
-export const CreateGameButton = (props: {
-  callback: (event: LogDescription) => void;
-  values: {
-    timeout: string;
-    tokenAddress: string;
-    amount: string;
-    size: string;
-  };
-  amountBN: BigNumber;
-  disabled: boolean;
+export const StepGameButton = (props: {
+  values: any;
+  callback: () => void;
   contractAddress: string;
+  disabled: boolean
 }) => {
-  const { callback, values, disabled, amountBN, contractAddress } = props;
+  const { callback, values, disabled, contractAddress } = props;
   const { library, account, chainId } = useEthers();
   const [loading, setLoading] = useState<boolean>(false);
-  const contract = new Contract(contractAddress, FactoryAbi.abi);
-  const { state, send, events } = useContractFunction(contract, "createGame");
+  const contract = new Contract(contractAddress, TicTacToeERC20.abi);
+  const { state, send, events } = useContractFunction(contract, "step");
   const [attems, setAttems] = useState<number>(0);
 
   useMemo(() => {
@@ -30,28 +24,28 @@ export const CreateGameButton = (props: {
       if (state.errorMessage)
         toast.error(state.errorMessage);
     if (state.status == "Success" && events) {
-      toast.success("Game successfully created!");
-      const event = events.find((event)=>event.name=='GameCreated');
-      if(event)
-        callback(event);
+      toast.success("Game Started! ");
+      callback();
     }
   }, [state.status, attems, events]);
 
   const createGame = useCallback(
     async (...args: any[]) => {
-      await send(values.timeout, values.tokenAddress, amountBN, values.size);
+      console.log('values', values);
+      await send(values.row, values.col);
     },
-    [library, values, amountBN, state.status, attems, events],
+    [library, values, contractAddress, state.status, attems, events],
   );
 
   if (state.status == "Success") {
-    console.log('events', events);
     return <Button color="primary" size={"lg"} block className="mr-1" disabled={true}>Finished</Button>;
   }
 
   return <Button
     color="primary" size={"lg"} block className="mr-1"
     disabled={state.status == "Mining" || disabled || loading} onClick={createGame}>
+
+
     {state.status == "Mining" ? "Mining..." : "Confirm"}
   </Button>;
 };

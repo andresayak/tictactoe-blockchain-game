@@ -14,7 +14,7 @@ async function main() {
       .ask(async (answer: any) => {
         if (answer) {
           const Contract = await ethers.getContractFactory(contractName);
-          const contract = await Contract.deploy();
+          const contract = await Contract.deploy(owner.address, 2);
           await contract.deployed();
           console.log(
             `Deployed ${contractName} to ${contract.address}`,

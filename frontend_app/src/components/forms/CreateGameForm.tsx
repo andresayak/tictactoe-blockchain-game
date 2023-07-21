@@ -1,7 +1,7 @@
 import { FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import React from "react";
 
-export const GameCreateForm = ({ tokenData, values, onChange, errors }: {
+export const CreateGameForm = ({ tokenData, values, onChange, errors }: {
   tokenData: any,
   values: any,
   onChange: (col: string, value: any) => void,

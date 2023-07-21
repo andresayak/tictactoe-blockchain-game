@@ -40,14 +40,14 @@ const config: HardhatUserConfig = {
     bsc_mainnet: {
       chainId: 56,
       url: `https://bsc-dataseed.binance.org/`,
-      accounts: [process.env.TBSC_PRIVATE_KEY || ""],
+      accounts: [process.env.BSC_PRIVATE_KEY || ""],
       gas: 5000000,
       gasPrice: 5000000000,
     },
     bsc_testnet: {
       chainId: 97,
       url: `https://data-seed-prebsc-1-s2.binance.org:8545`,
-      accounts: [process.env.BSC_PRIVATE_KEY || ""],
+      accounts: [process.env.TBSC_PRIVATE_KEY || ""],
       gas: 500000,
       gasPrice: 15000000000,
     },

@@ -46,10 +46,12 @@ export function PlayTicTacToeModal({ configs, game }: { configs: ConfigType, gam
                   </dl>
                   <dl className="row">
                     <dt className="col-sm-3">Created</dt>
-                    <dd className="col-sm-9"><Moment date={game.createdAt} fromNow />
+                    <dd className="col-sm-9">
+                      <Moment date={game.createdAt} fromNow />
                       <div className='small'>
                         <Moment date={game.createdAt}/>
-                      </div></dd>
+                      </div>
+                    </dd>
                   </dl>
                   <dl className="row">
                     <dt className="col-sm-3">Bet</dt>
@@ -58,8 +60,6 @@ export function PlayTicTacToeModal({ configs, game }: { configs: ConfigType, gam
                 </ModalBody>
                 <ModalFooter>
                   {tokenData && <>
-                    currentAllowanceBN: {ethers.utils.formatUnits(currentAllowanceBN, game.tokenDecimals)}<br/>
-                    amountBN: {ethers.utils.formatUnits(amountBN, game.tokenDecimals)}
                     <ApproveToken
                       allowanceBN={currentAllowanceBN}
                       tokenAddress={game.tokenAddress}

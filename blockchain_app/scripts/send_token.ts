@@ -32,15 +32,21 @@ async function main() {
   const contractName = "TestToken";
 
   const tokenContract = await ethers.getContractAt(contractName, response.tokenAddress);
+  console.log('tokenSymbol');
   const tokenSymbol = await tokenContract.symbol();
+
+  console.log('response', response);
   const amount = ethers.utils.parseUnits(response.amount, 18);
   const recipient = response.recipient;
 
+
   await new Promise(done => {
-    new Confirm(`Transfer ${amount} ${tokenSymbol} to ${recipient}?`)
+    new Confirm(`Transfer ${amount} to ${recipient}?`)
       .ask(async (answer: string) => {
         if (answer) {
-          const tx = await tokenContract.transfer(recipient, amount);
+          const tx = await tokenContract.transfer(recipient, amount, {
+            gasLimit: 300000
+          });
           console.log(`Transfer tx ${tx.hash}`);
           await tx.wait();
           console.log("Done!");

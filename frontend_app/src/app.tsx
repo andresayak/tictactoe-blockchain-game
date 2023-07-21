@@ -4,16 +4,13 @@ import Routes from "./routes/Routes";
 import { ToastContainer } from "react-toastify";
 import { BSC, BSCTestnet, Config, DAppProvider, Hardhat } from "@usedapp/core";
 import { MetamaskConnector, CoinbaseWalletConnector } from '@usedapp/core'
-
-
 export const allowNetworks: { [k: number]: string } = {
   [BSC.chainId]: "https://bsc-dataseed.binance.org/",
   [BSCTestnet.chainId]: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   [Hardhat.chainId]: 'http://localhost:8545/'
 }
-
 export const dappConfig: Config = {
-  readOnlyChainId: BSC.chainId,
+  readOnlyChainId: Hardhat.chainId,
   readOnlyUrls: allowNetworks,
   connectors: {
     metamask: new MetamaskConnector(),

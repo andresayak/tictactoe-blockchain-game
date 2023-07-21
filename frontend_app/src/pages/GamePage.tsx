@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
+import { Alert, Col, Row, Table } from "reactstrap";
 import { ConfigType } from "../redux/reducers/systemReducer";
 import { PageTitle } from "../components/PageTitle";
 import { useParams } from "react-router-dom";
@@ -9,10 +9,19 @@ import { Page404 } from "./errors/Page404";
 import { GameWrap } from "../components/GameWrap";
 import { TokenDataType } from "../types/token";
 import { TokenWrap } from "../components/TokenWrap";
-import { getExplorerAddressLink, useEthers } from "@usedapp/core";
+import {
+  getExplorerAddressLink,
+  getExplorerTransactionLink, shortenAddress,
+  shortenTransactionHash,
+  useEthers,
+  useLogs,
+} from "@usedapp/core";
 import { PlayTicTacToeModal } from "../components/modals/PlayTicTacToeModal";
 import { CancelGameModal } from "../components/modals/CancelGameModal";
 import { TimeoutGameModal } from "../components/modals/TimeoutGameModal";
+import { Contract } from "@ethersproject/contracts";
+import TicTacToeERC20Abi from "../contracts/TicTacToeERC20.sol/TicTacToeERC20.json";
+import { StepTicTacToeModal } from "../components/modals/StepTicTacToeModal";
 
 const GAME_STATUS_WAIT = 0;
 const GAME_STATUS_PROGRESS = 1;
@@ -33,7 +42,12 @@ const Component = ({configs}: {configs:ConfigType}) => {
   if(!gameAddress || !ethers.utils.isAddress(gameAddress)){
     return <Page404/>
   }
-  console.log('gameAddress', gameAddress, account);
+  const logs = useLogs({
+    contract: new Contract(gameAddress, TicTacToeERC20Abi.abi),
+    event: 'GameStep',
+    args: [],
+  });
+  console.log('logs', logs);
   return <>
     <div className="mt-5 py-5">
       <PageTitle title={"Blockchain Game Details"}/>
@@ -69,12 +83,16 @@ const Component = ({configs}: {configs:ConfigType}) => {
               </dl>
               <dl className="row">
                 <dt className="col-sm-3">Player1</dt>
-                <dd className="col-sm-9">{gameStatusData.player1}</dd>
+                <dd className="col-sm-9">
+                  <a href={chainId?getExplorerAddressLink(gameStatusData.player1, chainId):''}>{shortenAddress(gameStatusData.player1)}</a>
+                </dd>
               </dl>
               {gameStatusData?.status != GAME_STATUS_WAIT?<>
               <dl className="row">
                 <dt className="col-sm-3">Player2</dt>
-                <dd className="col-sm-9">{gameStatusData.player2}</dd>
+                <dd className="col-sm-9">
+                  <a href={chainId?getExplorerAddressLink(gameStatusData.player2, chainId):''}>{shortenAddress(gameStatusData.player2)}</a>
+                </dd>
               </dl>
               </>:null}
               <dl className="row">
@@ -93,20 +111,20 @@ const Component = ({configs}: {configs:ConfigType}) => {
                 <dd className="col-sm-9">{gameStatusData?.size} x {gameStatusData?.size}</dd>
               </dl>
               {gameStatusData?.status == GAME_STATUS_WAIT?<>
-                <span className="me-2">
-                  <PlayTicTacToeModal configs={configs} game={{
-                    address: gameAddress,
-                    token: tokenData.symbol,
-                    tokenAddress: gameStatusData.tokenAddress,
-                    tokenDecimals: tokenData.decimals,
-                    amount: gameStatusData.coins.toString(),
-                    creator: gameStatusData?.player1,
-                    createdAt: new Date().getTime(),
-                    lastStepAt: gameStatusData?.lastStepTime,
-                    timeout: gameStatusData.timeout,
-                    size: gameStatusData.size
-                  }}/>
-                </span>
+                  <span className="me-2">
+                    <PlayTicTacToeModal configs={configs} game={{
+                      address: gameAddress,
+                      token: tokenData.symbol,
+                      tokenAddress: gameStatusData.tokenAddress,
+                      tokenDecimals: tokenData.decimals,
+                      amount: gameStatusData.coins.toString(),
+                      creator: gameStatusData?.player1,
+                      createdAt: new Date().getTime(),
+                      lastStepAt: gameStatusData?.lastStepTime,
+                      timeout: gameStatusData.timeout,
+                      size: gameStatusData.size
+                    }}/>
+                  </span>
                   {gameStatusData.player1 == account ? <CancelGameModal gameAddress={gameAddress}/>:null}
                 </>
               :null}
@@ -117,7 +135,40 @@ const Component = ({configs}: {configs:ConfigType}) => {
               </>:null}
             </Col>
             <Col sm={6}>
-
+                <h3>Steps</h3>
+                <Table>
+                  <tbody>
+                  <tr>
+                    <th>
+                      Block
+                    </th>
+                    <th>
+                      Tx
+                    </th>
+                    <th>
+                      Side
+                    </th>
+                    <th>
+                      Cell
+                    </th>
+                  </tr>
+                  </tbody>
+                  {logs && logs.value && logs.value.map((log)=><tr>
+                    <td>
+                      {log.blockNumber}
+                    </td>
+                    <td>
+                      <a href={chainId?getExplorerTransactionLink(log.transactionHash, chainId):''}>{shortenTransactionHash(log.transactionHash)}</a>
+                    </td>
+                    <td>
+                      Player{log.data.side}
+                    </td>
+                    <td>
+                      {log.data.row} x {log.data.col}
+                    </td>
+                  </tr>)}
+                </Table>
+                <StepTicTacToeModal gameAddress={gameAddress}/>
             </Col>
           </Row>
           }}/>

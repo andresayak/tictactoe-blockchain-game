@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { useEthers } from "@usedapp/core";
 import { BigNumber } from "ethers";
 import { ConfigType } from "../../redux/reducers/systemReducer";
 import { ApproveToken } from "../forms/ApproveToken";
-import { GameCreateForm } from "../forms/GameCreateForm";
+import { CreateGameForm } from "../forms/CreateGameForm";
 import { TokenDataType } from "../../types/token";
 import { TokenWrap } from "../TokenWrap";
 import { CreateGameButton } from "../buttons/CreateGameButton";
@@ -40,11 +40,13 @@ export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
         <ModalHeader>Creating a Tic Tac Toe Game</ModalHeader>
         <TokenWrap
           tokenAddress={values.tokenAddress} account={account} errors={errors} setErrors={setErrors}
-          spenderAddress={configs.FACTORY_ADDRESS} children={(tokenData?: TokenDataType)=>{
-          const currentAllowanceBN = !tokenData || allowanceBN.gt(tokenData.allowanceBN)?allowanceBN:tokenData.allowanceBN;
+          spenderAddress={configs.FACTORY_ADDRESS} children={(tokenData?: TokenDataType) => {
+          const currentAllowanceBN = !tokenData || allowanceBN.gt(tokenData.allowanceBN) ? allowanceBN : tokenData.allowanceBN;
           return <>
             <ModalBody>
-              <GameCreateForm onChange={onChange} values={values} errors={errors} tokenData={tokenData} />
+              {!configs.FACTORY_ADDRESS ?
+                <Alert color="warning"> Factory address not set for this game</Alert>
+                : <CreateGameForm onChange={onChange} values={values} errors={errors} tokenData={tokenData} />}
             </ModalBody>
             <ModalFooter>
               {tokenData && <>
@@ -53,20 +55,21 @@ export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
                   tokenAddress={values.tokenAddress}
                   spenderAddress={configs.FACTORY_ADDRESS}
                   amountBN={amountBN}
-                  callback={(value)=>setAllowance(value)} />
+                  callback={(value) => setAllowance(value)} />
                 <CreateGameButton
                   disabled={currentAllowanceBN.lt(amountBN)}
                   contractAddress={configs.FACTORY_ADDRESS}
-                  callback={(event:LogDescription)=>{
+                  callback={(event: LogDescription) => {
                     const gameAddress = event.args.game;
                     toggle();
-                    navigate('/game/'+gameAddress);
+                    navigate("/game/" + gameAddress);
                   }}
+                  amountBN={amountBN}
                   values={values} />
               </>}
               <Button color="light" onClick={toggle} block>Cancel</Button>
-            </ModalFooter></>
-        }}/>
+            </ModalFooter></>;
+        }} />
       </Modal>
     </>
   );

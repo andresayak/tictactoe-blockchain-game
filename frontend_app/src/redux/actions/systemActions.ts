@@ -1,9 +1,10 @@
 import * as types from "../constants";
 import {api} from "../fetch";
 import { ConfigType } from "../reducers/systemReducer";
+import { Dispatch } from "redux";
 
-export const systemMainFetch = (dispatch: any) => {
-  const promise = api.get('/system/main');
+export const systemMainFetch = (dispatch: Dispatch, chainId: number) => {
+  const promise = api.get('/system/main/'+chainId);
   promise.then((json: {
     data: ConfigType
   }) => {
@@ -24,12 +25,12 @@ export const loaderStart = (dispatch: any) => {
   });
 }
 
-export const loaderStop = (dispatch: any) => {
+export const loaderStop = (dispatch: Dispatch) => {
   dispatch({
     type: types.SYSTEM_LOADER_STOP,
   });
 }
-export const loaderProgress = (dispatch: any, progress: number) => {
+export const loaderProgress = (dispatch: Dispatch, progress: number) => {
   dispatch({
     type: types.SYSTEM_LOADER_PROGRESS,
     progress
