@@ -31,7 +31,7 @@ export function PlayTicTacToeModal({ configs, game }: { configs: ConfigType, gam
           setErrors={setErrors} errors={errors}
           gameAddress={game.address} children={()=>{
             return <TokenWrap
-              tokenAddress={game.tokenAddress} account={account} errors={errors} setErrors={setErrors}
+              tokenAddress={game.tokenAddress} account={account} setErrors={setErrors}
               spenderAddress={game.address} children={(tokenData?: TokenDataType)=>{
               const currentAllowanceBN = !tokenData || allowanceBN.gt(tokenData.allowanceBN)?allowanceBN:tokenData.allowanceBN;
               return <>

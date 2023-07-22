@@ -6,9 +6,8 @@ import ERC20TokenAbi from "../contracts/ERC20.sol/ERC20.json";
 import { TokenDataType } from "../types/token";
 
 export const TokenWrap = (props: {
-  errors: any,
   children: (tokenData?:TokenDataType)=>React.ReactElement
-  setErrors: (errors: any) => void;
+  setErrors?: (errors: any) => void;
   account: string | undefined; tokenAddress: string;
   spenderAddress: string
 }) => {
@@ -68,8 +67,10 @@ export const TokenWrap = (props: {
       }
     } catch (e: unknown) {
       console.log(e);
-      if (e && e.toString().match(/call revert exception/)) {
-        setErrors({ tokenAddress: ["Invalid token address"] });
+      if(setErrors){
+        if (e && e.toString().match(/call revert exception/)) {
+          setErrors({ tokenAddress: ["Invalid token address"] });
+        }
       }
     }
   }

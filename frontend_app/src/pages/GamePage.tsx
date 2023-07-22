@@ -57,7 +57,7 @@ const Component = ({configs}: {configs:ConfigType}) => {
           return <div></div>;
         }
         return <TokenWrap
-          tokenAddress={gameStatusData.tokenAddress} account={account} errors={errors} setErrors={setErrors}
+          tokenAddress={gameStatusData.tokenAddress} account={account} setErrors={setErrors}
           spenderAddress={gameAddress} children={(tokenData?: TokenDataType)=>{
           if(!tokenData) {
             return <div></div>;

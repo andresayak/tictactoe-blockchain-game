@@ -7,6 +7,7 @@ import ERC20TokenAbi from "../../contracts/ERC20.sol/ERC20.json";
 import { BigNumber } from "ethers";
 
 type PropType = {
+  disabled?: boolean;
   allowanceBN: BigNumber;
   amountBN: BigNumber
   tokenAddress: string;
@@ -14,12 +15,12 @@ type PropType = {
   callback: (allowanceBN: BigNumber)=>void;
 }
 export const ApproveToken = (props: PropType) => {
-  const { callback, allowanceBN, amountBN, tokenAddress, spenderAddress } = props;
+  const { callback, disabled: forceDisabled = true, allowanceBN, amountBN, tokenAddress, spenderAddress } = props;
   const contract = new Contract(tokenAddress, ERC20TokenAbi.abi);
   const { state, send, events } = useContractFunction(contract, "approve");
   const [attems, setAttems] = useState<number>(0);
 
-  let disabled = allowanceBN.gte(amountBN);
+  let disabled = forceDisabled || allowanceBN.gte(amountBN);
   useMemo(() => {
     if (state.status == "Exception")
       if (state.errorMessage)

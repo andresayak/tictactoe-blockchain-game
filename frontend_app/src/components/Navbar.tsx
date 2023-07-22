@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React  from "react";
 import {
   Nav,
   Navbar,
@@ -11,7 +11,7 @@ import { matchPath } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { exploreRoutes } from "../routes";
+import { exploreRoutes, myRoutes } from "../routes";
 import { useEthers, shortenAddress } from '@usedapp/core'
 import { allowNetworks } from "../app";
 import { WrongNetworkModal } from "./modals/WrongNetworkModal";
@@ -25,6 +25,12 @@ export default (props: any) => {
     url: exploreRoutes.path,
     match: () => {
       return !!matchPath(exploreRoutes.path, location.pathname);
+    },
+  }, {
+    label: "My games",
+    url: myRoutes.path,
+    match: () => {
+      return !!matchPath(myRoutes.path, location.pathname);
     },
   }];
   const { account, chainId, deactivate, activateBrowserWallet } = useEthers();

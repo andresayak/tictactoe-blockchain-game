@@ -14,3 +14,19 @@
 .blocNumber:hover{
   opacity: 1;
 }
+
+a:not([href]):not([class]), a:not([href]):not([class]):hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tokenList .tokenList-item:hover{
+  background: $light;
+  cursor: pointer;
+}
+.tokenList-icon{
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  background: $light;
+}

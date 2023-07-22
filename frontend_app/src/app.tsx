@@ -9,6 +9,11 @@ export const allowNetworks: { [k: number]: string } = {
   [BSCTestnet.chainId]: "https://data-seed-prebsc-1-s1.binance.org:8545/",
   [Hardhat.chainId]: 'http://localhost:8545/'
 }
+export const tokenLists : { [k: number]: string } = {
+  [BSC.chainId]: "https://tokens.coingecko.com/binance-smart-chain/all.json",
+  [BSCTestnet.chainId]: "",
+  [Hardhat.chainId]: ''
+}
 export const dappConfig: Config = {
   readOnlyChainId: Hardhat.chainId,
   readOnlyUrls: allowNetworks,

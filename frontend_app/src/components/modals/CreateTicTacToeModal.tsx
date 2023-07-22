@@ -11,6 +11,7 @@ import { CreateGameButton } from "../buttons/CreateGameButton";
 import { createBN } from "../../helpers/createBN";
 import { LogDescription } from "ethers/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { TokenList } from "../TokenList";
 
 export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
   const navigate = useNavigate();
@@ -38,26 +39,38 @@ export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
       </Button>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader>Creating a Tic Tac Toe Game</ModalHeader>
+        {!values.tokenAddress && <TokenList selectToken={(tokenAddress)=>onChange('tokenAddress', tokenAddress)} spenderAddress={configs.FACTORY_ADDRESS}/>}
         <TokenWrap
-          tokenAddress={values.tokenAddress} account={account} errors={errors} setErrors={setErrors}
+          tokenAddress={values.tokenAddress} account={account} setErrors={setErrors}
           spenderAddress={configs.FACTORY_ADDRESS} children={(tokenData?: TokenDataType) => {
           const currentAllowanceBN = !tokenData || allowanceBN.gt(tokenData.allowanceBN) ? allowanceBN : tokenData.allowanceBN;
+          if(!tokenData) {
+            return <></>
+          }
           return <>
-            <ModalBody>
+
               {!configs.FACTORY_ADDRESS ?
                 <Alert color="warning"> Factory address not set for this game</Alert>
-                : <CreateGameForm onChange={onChange} values={values} errors={errors} tokenData={tokenData} />}
-            </ModalBody>
+                : <>
+                  <div className="border-bottom p-3" onClick={()=>onChange('tokenAddress', '')}>
+                    <div className="h4 mb-0">{tokenData.name} ({tokenData.symbol})</div>
+                    <div>{tokenData.address}</div>
+                  </div>
+                  <ModalBody>
+                    <CreateGameForm onChange={onChange} values={values} errors={errors} tokenData={tokenData} />
+                  </ModalBody>
+                </>}
             <ModalFooter>
               {tokenData && <>
                 <ApproveToken
+                  disabled={!values.agree}
                   allowanceBN={currentAllowanceBN}
                   tokenAddress={values.tokenAddress}
                   spenderAddress={configs.FACTORY_ADDRESS}
                   amountBN={amountBN}
                   callback={(value) => setAllowance(value)} />
                 <CreateGameButton
-                  disabled={currentAllowanceBN.lt(amountBN)}
+                  disabled={!values.agree || currentAllowanceBN.lt(amountBN)}
                   contractAddress={configs.FACTORY_ADDRESS}
                   callback={(event: LogDescription) => {
                     const gameAddress = event.args.game;

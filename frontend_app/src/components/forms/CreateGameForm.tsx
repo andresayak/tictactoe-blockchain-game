@@ -18,15 +18,12 @@ export const CreateGameForm = ({ tokenData, values, onChange, errors }: {
   };
 
   return <div>
-    <FormGroup className="mr-1">
-      <Label>Token</Label>
-      <Input invalid={isError("tokenAddress")} value={values.tokenAddress} type="text" name="tokenAddress"
-             onChange={(e) => onChange("tokenAddress", e.currentTarget.value)} />
-      {renderErrors("tokenAddress")}
-    </FormGroup>
+
     {tokenData ? <>
       <FormGroup className="mr-1">
-        <div className="float-end small">Balance: {tokenData.balance} {tokenData.symbol}</div>
+        <div className="float-end small">Balance: {tokenData.balance} {tokenData.symbol}{' '}
+          <a onClick={()=>onChange("amount", tokenData.balance)}>Max</a>
+      </div>
         <Label>Amount</Label>
         <Input invalid={isError("amount")} value={values.amount} type="number" min="1" name="amount"
                onChange={(e) => onChange("amount", e.currentTarget.value)} />
@@ -39,8 +36,8 @@ export const CreateGameForm = ({ tokenData, values, onChange, errors }: {
         {renderErrors("size")}
       </FormGroup>
       <FormGroup className="mr-1">
-        <Label>Step timeout</Label>
-        <Input invalid={isError("timeout")} value={values.timeout} type="number" min="60" name="timeout"
+        <Label>Step timeout (seconds)</Label>
+        <Input invalid={isError("timeout")} value={values.timeout} type="number" min="60" max="65535" name="timeout"
                onChange={(e) => onChange("timeout", e.currentTarget.value)} />
         {renderErrors("timeout")}
       </FormGroup>
