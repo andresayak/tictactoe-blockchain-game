@@ -96,9 +96,9 @@ export const GameWrap = (props: {
         coins = result[5][0];
         player1 = result[6][0];
         player2 = result[7][0];
-        size = result[8][0].toNumber();
-        timeout = result[9][0].toNumber();
-        currentTime = result[10][0].toNumber();
+        size = result[8][0];
+        timeout = result[9][0];
+        currentTime = result[10][0];//.toNumber();
         return children({
           turnNumber,
           lastStepTime,

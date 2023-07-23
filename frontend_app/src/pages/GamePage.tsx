@@ -53,10 +53,12 @@ const Component = ({configs}: {configs:ConfigType}) => {
       <PageTitle title={"Blockchain Game Details"}/>
       {account?
       <GameWrap errors={errors} setErrors={setErrors} gameAddress={gameAddress} children={(gameStatusData)=>{
+        console.log('gameStatusData', gameStatusData);
         if(!gameStatusData) {
           return <div></div>;
         }
-        return <TokenWrap
+        return <div></div>;
+        /*return <TokenWrap
           tokenAddress={gameStatusData.tokenAddress} account={account} setErrors={setErrors}
           spenderAddress={gameAddress} children={(tokenData?: TokenDataType)=>{
           if(!tokenData) {
@@ -171,7 +173,7 @@ const Component = ({configs}: {configs:ConfigType}) => {
                 <StepTicTacToeModal gameAddress={gameAddress}/>
             </Col>
           </Row>
-          }}/>
+          }}/>*/
       }}/>:<div>
           <Alert color="info">
             <h4 className="alert-heading">

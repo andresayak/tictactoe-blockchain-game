@@ -33,7 +33,7 @@ export default (props: any) => {
       return !!matchPath(myRoutes.path, location.pathname);
     },
   }];
-  const { account, chainId, deactivate, activateBrowserWallet } = useEthers();
+  const { account, chainId } = useEthers();
   if (account && (!chainId || !allowNetworks[chainId])) {
     return <WrongNetworkModal/>
   }
