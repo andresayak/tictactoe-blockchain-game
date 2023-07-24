@@ -35,4 +35,8 @@ contract Factory is Ownable {
         emit GameCreated(address(game), _msgSender());
         return address(game);
     }
+
+    function currentTime() external view returns (uint256){
+        return block.timestamp;
+    }
 }

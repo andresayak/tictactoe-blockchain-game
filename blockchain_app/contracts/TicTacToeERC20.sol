@@ -139,8 +139,4 @@ contract TicTacToeERC20 is IGame {
             emit GameEnded(Side.NONE, 0, 0);
         }
     }
-
-    function currentTime() external view returns (uint256){
-        return block.timestamp;
-    }
 }

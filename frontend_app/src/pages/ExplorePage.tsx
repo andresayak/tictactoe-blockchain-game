@@ -5,10 +5,12 @@ import { ConfigType } from "../redux/reducers/systemReducer";
 import { PageTitle } from "../components/PageTitle";
 import { Tabs } from "../components/Tabs";
 import { GameList } from "../components/GameList";
-import { GameType } from "../types/game";
+import { GameDataType } from "../types/game";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import { useEthers } from "@usedapp/core";
+import { Loader } from "../components/Loader";
 
 const tabs = [
   { code: "wait", to: "/explore", label: "Wait" },
@@ -25,34 +27,47 @@ function useQuery() {
 }
 
 const Component = ({configs}: {configs:ConfigType}) => {
+  const { account, chainId } = useEthers();
   const query = useQuery();
   const defaultTab = 'wait';
   const currentTab = query['tab']?query['tab']:defaultTab;
   const [tab, setTab] = useState<string>(currentTab);
   const [loading, setLoading] = useState<boolean>(false);
-  const [items, setItems] = useState<GameType[]>([]);
+  const [items, setItems] = useState<GameDataType[]>([]);
+
 
   const fetchData = useCallback(()=>{
     setLoading(true);
-    axios.get('/api/explore/'+tab).then(({data})=>{
+    axios.get('/api/explore/'+chainId+'/'+tab).then(({data})=>{
       setItems(data.items);
     }).catch((reason)=>{
       toast.error(reason.message);
     }).finally(()=>setLoading(false));
-  }, [tab]);
+  }, [tab, chainId]);
   useEffect(()=>{
-    fetchData();
+    if(chainId){
+      fetchData();
+    }
   }, [
-    tab
-  ])
+    tab, chainId
+  ]);
+  if(!chainId || !account){
+    return <></>;
+  }
   return <>
-    {loading?'loading...':''}
     <div className="mt-5 py-5">
-      <PageTitle title={"Blockchain Games"}/>
+      <div className="d-flex">
+        <div className="flex-fill">
+          <PageTitle title={"Blockchain Games"}/>
+        </div>
+        <div>
+          <Loader isShow={loading}/>
+        </div>
+      </div>
       <Tabs tab={tab} setTab={setTab} items={tabs}/>
       <Row>
         <Col sm={12}>
-          <GameList items={items} configs={configs}/>
+          <GameList items={items} configs={configs} account={account}/>
         </Col>
       </Row>
     </div>

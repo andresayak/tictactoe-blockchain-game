@@ -29,7 +29,7 @@ export const CreateGameForm = ({ tokenData, values, onChange, errors }: {
     {tokenData ? <>
       <FormGroup className="mr-1">
         <div className="float-end small">Balance: {tokenData.balance} {tokenData.symbol}{' '}
-          <a onClick={()=>onChange("amount", tokenData.balance)}>Max</a>
+          <a className="small" onClick={()=>onChange("amount", tokenData.balance)}>Max</a>
       </div>
         <Label>Amount</Label>
         <Input invalid={isError("amount")} value={values.amount} type="number" min="1" name="amount"

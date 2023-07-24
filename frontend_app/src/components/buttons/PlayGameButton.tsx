@@ -4,14 +4,14 @@ import { Contract } from "ethers";
 import TicTacToeERC20 from "../../contracts/TicTacToeERC20.sol/TicTacToeERC20.json";
 import { toast } from "react-toastify";
 import { Button } from "reactstrap";
-import { GameType } from "../../types/game";
+import { GameDataType } from "../../types/game";
 
 export const PlayGameButton = (props: {
   callback: () => void;
-  game: GameType, disabled: boolean
+  game: GameDataType, disabled: boolean
 }) => {
   const { callback, game, disabled } = props;
-  const { library, account, chainId } = useEthers();
+  const { library } = useEthers();
   const [loading, setLoading] = useState<boolean>(false);
   const contract = new Contract(game.address, TicTacToeERC20.abi);
   const { state, send, events } = useContractFunction(contract, "start");

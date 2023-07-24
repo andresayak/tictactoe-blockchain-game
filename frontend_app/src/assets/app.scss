@@ -15,7 +15,7 @@
   opacity: 1;
 }
 
-a:not([href]):not([class]), a:not([href]):not([class]):hover{
+a:not([href]), a:not([href]):hover{
   cursor: pointer;
   text-decoration: underline;
 }

@@ -5,7 +5,7 @@ import {
   NavbarBrand,
   NavItem,
   NavLink,
-  Input, Badge,
+  Badge,
 } from "reactstrap";
 import { matchPath } from "react-router-dom";
 
@@ -17,7 +17,7 @@ import { allowNetworks } from "../app";
 import { WrongNetworkModal } from "./modals/WrongNetworkModal";
 import { ConnectButton } from "./modals/ConnectButton";
 
-export default (props: any) => {
+export default () => {
   const location = useLocation();
 
   const items = [{
@@ -48,9 +48,6 @@ export default (props: any) => {
         <img src="/assets/logo.svg" title="FreeToken" />
       </NavbarBrand>
       <Nav className="mr-auto order-sm-last w-sm-100" navbar>
-        <div className="flex-fill form-search px-2 d-none d-sm-inline-block">
-          <Input placeholder="Search ..." />
-        </div>
           {account && (
             <NavItem>
               <Badge

@@ -21,6 +21,11 @@ export class Games1690135469242 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: "address",
+            type: "varchar(128)",
+            isNullable: true,
+          },
+          {
             name: "tokenAddress",
             type: "varchar(128)",
             isNullable: true,
@@ -32,11 +37,6 @@ export class Games1690135469242 implements MigrationInterface {
           },
           {
             name: "creatorAddress",
-            type: "varchar(128)",
-            isNullable: true,
-          },
-          {
-            name: "address",
             type: "varchar(128)",
             isNullable: true,
           },

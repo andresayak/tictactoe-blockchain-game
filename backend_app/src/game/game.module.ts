@@ -7,6 +7,8 @@ import { Connection } from "typeorm";
 import { GameEntity, GamePlayerEntity } from "./entities";
 import { DatabaseModule } from "../database/database.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigService } from "@nestjs/config";
+import { createClient } from "redis";
 
 const entities = TypeOrmModule.forFeature([GameEntity, GamePlayerEntity]);
 
@@ -25,6 +27,17 @@ const entities = TypeOrmModule.forFeature([GameEntity, GamePlayerEntity]);
       provide: "GAME_PLAYER_REPOSITORY",
       useFactory: (connection: Connection) => connection.getRepository(GamePlayerEntity),
       inject: ["DATABASE_CONNECTION"],
+    },
+    {
+      provide: "REDIS_CLIENT",
+      useFactory: async (configService: ConfigService) => {
+        const redisClient = createClient({
+          url: `redis://:${configService.get("REDIS_PASSWORD")}@${configService.get("REDIS_HOST")}:${configService.get("REDIS_PORT")}`,
+        });
+        await redisClient.connect();
+        return redisClient;
+      },
+      inject: [ConfigService],
     },
   ],
   exports: [entities],

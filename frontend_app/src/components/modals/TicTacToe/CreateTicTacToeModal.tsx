@@ -3,7 +3,7 @@ import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "react
 import { useEthers } from "@usedapp/core";
 import { BigNumber } from "ethers";
 import { ConfigType } from "../../../redux/reducers/systemReducer";
-import { ApproveToken } from "../../forms/ApproveToken";
+import { ApproveToken } from "../../buttons/ApproveToken";
 import { CreateGameForm } from "./CreateGameForm";
 import { TokenDataType } from "../../../types/token";
 import { TokenWrap } from "../../TokenWrap";
@@ -13,9 +13,9 @@ import { LogDescription } from "ethers/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { TokenList } from "../../TokenList";
 
-export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
+export function CreateTicTacToeModal({ configs, children }: { configs: ConfigType, children: (onClick: ()=>void) => React.ReactElement }) {
   const navigate = useNavigate();
-  const { account, deactivate, activateBrowserWallet } = useEthers();
+  const { account } = useEthers();
   const [modal, setModal] = useState(false);
   const [allowanceBN, setAllowance] = useState<BigNumber>(BigNumber.from(0));
   const [errors, setErrors] = useState<any>({});
@@ -40,9 +40,7 @@ export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
   const amountBN = createBN(values.amount, values.decimals);
   return (
     <>
-      <Button color="light" onClick={toggle}>
-        Create Tic Tac Toe Gam
-      </Button>
+      {children(toggle)}
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader>Creating a Tic Tac Toe Game</ModalHeader>
         {!values.tokenAddress && <TokenList selectToken={(tokenAddress)=>onChange('tokenAddress', tokenAddress)} spenderAddress={configs.FACTORY_ADDRESS}/>}
@@ -57,9 +55,16 @@ export function CreateTicTacToeModal({ configs }: { configs: ConfigType }) {
               {!configs.FACTORY_ADDRESS ?
                 <Alert color="warning"> Factory address not set for this game</Alert>
                 : <>
-                  <div className="border-bottom p-3" onClick={()=>onChange('tokenAddress', '')}>
-                    <div className="h4 mb-0">{tokenData.name} ({tokenData.symbol})</div>
-                    <div>{tokenData.address}</div>
+                  <div className="border-bottom p-3">
+                    <div className="d-flex">
+                      <div className="flex-fill">
+                        <div className="h4 mb-0">{tokenData.name} ({tokenData.symbol})</div>
+                        <div>{tokenData.address}</div>
+                      </div>
+                      <div>
+                        <a className="small" onClick={()=>onChange('tokenAddress', '')}>Edit</a>
+                      </div>
+                    </div>
                   </div>
                   <ModalBody>
                     <CreateGameForm onChange={onChange} values={values} errors={errors} tokenData={tokenData} />

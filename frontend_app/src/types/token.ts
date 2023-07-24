@@ -8,3 +8,4 @@ export type TokenDataType = {
   name: string;
   allowanceBN: BigNumber;
 };
+

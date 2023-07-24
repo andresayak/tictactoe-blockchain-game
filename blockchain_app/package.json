@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "npx hardhat compile; cp -R ./artifacts/contracts ../backend_appOLD/src; cp -R ./artifacts/contracts ../frontend_app/src",
+    "compile": "npx hardhat compile; cp -R ./artifacts/contracts ../backend_app/src; cp -R ./artifacts/contracts ../frontend_app/src",
     "lint": "./node_modules/.bin/solhint -f table 'contracts/**/*.sol' -w 0",
     "format": "./node_modules/.bin/prettier --write 'contracts/**/*.sol'"
   },

@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param } from "@nestjs/common";
+import { Controller, Get, Inject, Param, ParseIntPipe } from "@nestjs/common";
 import { In, Repository } from "typeorm";
 import { GameEntity, Statuses } from "../entities";
 
@@ -19,7 +19,7 @@ export class ExploreController {
   }
 
   @Get("wait")
-  async wait(@Param("chainId") chainId: number) {
+  async wait(@Param("chainId", ParseIntPipe) chainId: number) {
     const items = await this.getItems(chainId, Statuses.WAIT);
     return {
       items,
@@ -27,7 +27,7 @@ export class ExploreController {
   }
 
   @Get("progress")
-  async progress(@Param("chainId") chainId: number) {
+  async progress(@Param("chainId", ParseIntPipe) chainId: number) {
     const items = await this.getItems(chainId, Statuses.PROGRESS);
     return {
       items,
@@ -35,10 +35,23 @@ export class ExploreController {
   }
 
   @Get("closed")
-  async closed(@Param("chainId") chainId: number) {
+  async closed(@Param("chainId", ParseIntPipe) chainId: number) {
     const items = await this.getItems(chainId, [Statuses.FINISHED, Statuses.CANCELED]);
     return {
       items,
+    };
+  }
+
+  @Get("details/:address")
+  async details(@Param("chainId", ParseIntPipe) chainId: number, @Param("address") address: string) {
+    const game = await this.gameRepository.findOne({
+      where: {
+        chainId,
+        address,
+      },
+    });
+    return {
+      game,
     };
   }
 }

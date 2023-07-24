@@ -6,7 +6,7 @@ import ERC20TokenAbi from "../contracts/ERC20.sol/ERC20.json";
 import { TokenDataType } from "../types/token";
 
 export const TokenWrap = (props: {
-  children: (tokenData?:TokenDataType)=>React.ReactElement
+  children: (tokenData:TokenDataType)=>React.ReactElement
   setErrors?: (errors: any) => void;
   account: string | undefined; tokenAddress: string;
   spenderAddress: string
@@ -74,5 +74,5 @@ export const TokenWrap = (props: {
       }
     }
   }
-  return children();
+  return null;
 };
