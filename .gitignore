@@ -36,5 +36,5 @@ lerna-debug.log*
 /frontend_app/.env
 /.env
 
-/backend_app/dist/
-/backend_app/dist/
+/backend_appOLD/node_modules/
+/backend_appOLD/.env

@@ -3,7 +3,7 @@ services:
 
   backend_app:
     build:
-      context: ./backend_app
+      context: backend_appOLD
       dockerfile: Dockerfile
       target: base
     container_name: backend_app
