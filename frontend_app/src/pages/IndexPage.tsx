@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { CreateTicTacToeModal } from "../components/modals/CreateTicTacToeModal";
+import { CreateTicTacToeModal } from "../components/modals/TicTacToe/CreateTicTacToeModal";
 import { Col, Row } from "reactstrap";
 import { ConfigType } from "../redux/reducers/systemReducer";
 

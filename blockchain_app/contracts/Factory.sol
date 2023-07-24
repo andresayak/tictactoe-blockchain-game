@@ -10,6 +10,7 @@ import "./utils/Context.sol";
 contract Factory is Ownable {
     IGame[] public games;
     address public immutable treasury;
+    uint public birthdayBlock;
     uint8 public immutable fee;
 
     event GameCreated(address game, address creator);
@@ -17,6 +18,7 @@ contract Factory is Ownable {
     constructor(address _treasury, uint8 _fee){
         treasury = _treasury;
         fee = _fee;
+        birthdayBlock = block.number;
     }
 
     function _msgSender() internal view override(Context) returns (address) {

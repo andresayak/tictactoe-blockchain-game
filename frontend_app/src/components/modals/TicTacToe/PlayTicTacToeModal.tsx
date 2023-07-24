@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { useEthers } from "@usedapp/core";
 import { BigNumber } from "ethers";
-import { ConfigType } from "../../redux/reducers/systemReducer";
-import { ApproveToken } from "../forms/ApproveToken";
-import { TokenDataType } from "../../types/token";
-import { TokenWrap } from "../TokenWrap";
-import { GameType } from "../../types/game";
-import { PlayGameButton } from "../buttons/PlayGameButton";
+import { ConfigType } from "../../../redux/reducers/systemReducer";
+import { ApproveToken } from "../../forms/ApproveToken";
+import { TokenDataType } from "../../../types/token";
+import { TokenWrap } from "../../TokenWrap";
+import { GameType } from "../../../types/game";
+import { PlayGameButton } from "../../buttons/PlayGameButton";
 import Moment from "react-moment";
 import { ethers } from "ethers/lib.esm";
-import { GameWrap } from "../GameWrap";
+import { GameWrap } from "../../GameWrap";
 
 export function PlayTicTacToeModal({ configs, game }: { configs: ConfigType, game: GameType }) {
   const { account, deactivate, activateBrowserWallet } = useEthers();

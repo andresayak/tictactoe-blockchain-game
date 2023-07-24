@@ -5,11 +5,11 @@ import "./interfaces/IERC20.sol";
 import "./IGame.sol";
 
 contract TicTacToeERC20 is IGame {
-    uint16 public constant GAME_TYPE = 0;
-
     enum GameStatus{WAIT, PROGRESS, FINISHED, CANCELED}
     enum Side{NONE, PLAYER1, PLAYER2}
 
+    uint16 public constant GAME_TYPE = 0;
+    uint public birthdayBlock;
     address public immutable factory;
     address public immutable treasury;
     uint8 public immutable fee;
@@ -48,6 +48,7 @@ contract TicTacToeERC20 is IGame {
         treasury = _treasury;
         fee = _fee;
         createdTime = block.timestamp;
+        birthdayBlock = block.number;
     }
 
     function init(uint16 _timeoutTime, address _token, uint _coins, uint8 _size) external {

@@ -16,12 +16,8 @@ import {
   useEthers,
   useLogs,
 } from "@usedapp/core";
-import { PlayTicTacToeModal } from "../components/modals/PlayTicTacToeModal";
-import { CancelGameModal } from "../components/modals/CancelGameModal";
-import { TimeoutGameModal } from "../components/modals/TimeoutGameModal";
 import { Contract } from "@ethersproject/contracts";
 import TicTacToeERC20Abi from "../contracts/TicTacToeERC20.sol/TicTacToeERC20.json";
-import { StepTicTacToeModal } from "../components/modals/StepTicTacToeModal";
 
 const GAME_STATUS_WAIT = 0;
 const GAME_STATUS_PROGRESS = 1;

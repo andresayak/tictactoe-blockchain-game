@@ -1,7 +1,7 @@
 import { Button, Table } from "reactstrap";
 import { GameType, gameTypes } from "../types/game";
 import Moment from "react-moment";
-import { PlayTicTacToeModal } from "./modals/PlayTicTacToeModal";
+import { PlayTicTacToeModal } from "./modals/TicTacToe/PlayTicTacToeModal";
 import { ConfigType } from "../redux/reducers/systemReducer";
 import { Link } from "react-router-dom";
 import { shortenAddress } from "@usedapp/core";
