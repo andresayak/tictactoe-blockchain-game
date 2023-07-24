@@ -10,9 +10,6 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-/backend_app/.env
-/backend_app/node_modules/
-
 # OS
 .DS_Store
 
@@ -39,4 +36,5 @@ lerna-debug.log*
 /frontend_app/.env
 /.env
 
+/backend_app/dist/
 /backend_app/dist/
