@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { exploreRoutes, myRoutes } from "../routes";
 import { useEthers, shortenAddress } from '@usedapp/core'
-import { allowNetworks } from "../app";
+import { readOnlyUrls } from "../app";
 import { WrongNetworkModal } from "./modals/WrongNetworkModal";
 import { ConnectButton } from "./modals/ConnectButton";
 
@@ -34,7 +34,7 @@ export default () => {
     },
   }];
   const { account, chainId } = useEthers();
-  if (account && (!chainId || !allowNetworks[chainId])) {
+  if (account && (!chainId || !readOnlyUrls[chainId])) {
     return <WrongNetworkModal/>
   }
   return <div className="border-bottom">

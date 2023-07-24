@@ -5,12 +5,13 @@ import { ToastContainer } from "react-toastify";
 import { BSC, BSCTestnet, Config, DAppProvider, Hardhat } from "@usedapp/core";
 import { MetamaskConnector, CoinbaseWalletConnector } from "@usedapp/core";
 
-export const allowNetworks: { [k: number]: string } = {
+export const readOnlyUrls: { [k: number]: string } = {
   [BSC.chainId]: process.env.BSCMAINNET_PROVIDER_URL ?? "https://bsc-dataseed.binance.org/",
   [BSCTestnet.chainId]: process.env.BSCTESTNET_PROVIDER_URL ?? "https://data-seed-prebsc-1-s1.binance.org:8545/",
   [Hardhat.chainId]: "http://localhost:8545/",
 };
-console.log('allowNetworks', allowNetworks);
+export const allowNetworks = [Hardhat, BSC, BSCTestnet];
+
 export const tokenLists: { [k: number]: string } = {
   [BSC.chainId]: "https://tokens.coingecko.com/binance-smart-chain/all.json",
   [BSCTestnet.chainId]: "",
@@ -18,12 +19,12 @@ export const tokenLists: { [k: number]: string } = {
 };
 export const dappConfig: Config = {
   readOnlyChainId: Hardhat.chainId,
-  readOnlyUrls: allowNetworks,
+  readOnlyUrls,
   connectors: {
     metamask: new MetamaskConnector(),
     coinbase: new CoinbaseWalletConnector(),
   },
-  networks: [Hardhat, BSC, BSCTestnet],
+  networks: allowNetworks,
 };
 
 export function App() {

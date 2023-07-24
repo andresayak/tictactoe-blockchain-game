@@ -15,7 +15,7 @@ type PropType = {
   callback: (allowanceBN: BigNumber)=>void;
 }
 export const ApproveToken = (props: PropType) => {
-  const { callback, disabled: forceDisabled = true, allowanceBN, amountBN, tokenAddress, spenderAddress } = props;
+  const { callback, disabled: forceDisabled = false, allowanceBN, amountBN, tokenAddress, spenderAddress } = props;
   const contract = new Contract(tokenAddress, ERC20TokenAbi.abi);
   const { state, send, events } = useContractFunction(contract, "approve");
   const [attems, setAttems] = useState<number>(0);

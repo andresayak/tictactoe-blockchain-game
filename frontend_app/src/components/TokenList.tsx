@@ -51,6 +51,9 @@ export const RecentList = ({ selectToken, chainId }: {
     }
   }, [chainId]);
 
+  if(!items.length){
+    return null;
+  }
   return <div className="p-3">
     {items.map((token, index) => {
       return <React.Fragment key={index}>

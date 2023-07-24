@@ -12,7 +12,6 @@ export const FactoryWrap = (props: {
   account: string | undefined; factoryAddress: string;
 }) => {
   const { children, factoryAddress, setErrors } = props;
-
   let currentTime: any = 0;
   if(factoryAddress && ethers.utils.isAddress(factoryAddress)) {
     try {
@@ -23,8 +22,7 @@ export const FactoryWrap = (props: {
         args: [],
       }]) ?? [];
       if (result && result[0]) {
-        console.log('result', result);
-        currentTime = result[0][0];
+        currentTime = result[0][0].toNumber();
         return children({
           currentTime
         });

@@ -23,7 +23,7 @@ export const StepGameButton = (props: {
       if (state.errorMessage)
         toast.error(state.errorMessage);
     if (state.status == "Success" && events) {
-      toast.success("Game Started! ");
+      toast.success("Step Saved! ");
       callback();
     }
   }, [state.status, attems, events]);
@@ -35,10 +35,6 @@ export const StepGameButton = (props: {
     },
     [library, values, contractAddress, state.status, attems, events],
   );
-
-  if (state.status == "Success") {
-    return <Button color="primary" size={"lg"} block className="mr-1" disabled={true}>Finished</Button>;
-  }
 
   return <Button
     color="primary" size={"lg"} block className="mr-1"
