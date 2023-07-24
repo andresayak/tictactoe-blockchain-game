@@ -17,43 +17,11 @@ services:
     volumes:
       - ./backend_app:/var/www/app:z
       - ./volumes/logs:/var/www/app/logs:z
-    ports:
-      - "5000:5000"
     extra_hosts:
       - "host:host-gateway"
     links:
       - db
       - redis
-    networks:
-      - app-network
-
-  hardhat:
-    build:
-      context: ./blockchain_app
-      dockerfile: Dockerfile
-      target: base
-    container_name: hardhat
-    restart: unless-stopped
-    tty: true
-    user: "1000:1000"
-    working_dir: /var/www/app
-    expose:
-      - "8545"
-    ports:
-      - "8545:8545"
-    volumes:
-      - ./blockchain_app:/var/www/app:z
-      - blockchain_state:/var/www/blockchain_state
-    extra_hosts:
-      - "host:host-gateway"
-    networks:
-      - app-network
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "2080:8080"
     networks:
       - app-network
 
@@ -77,8 +45,6 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     command: [ 'redis-server', '--appendonly yes', '--requirepass $REDIS_PASSWORD' ]
-    ports:
-      - "6379:6379"
     volumes:
       - redisdata:/data
     networks:
@@ -95,8 +61,6 @@ services:
     working_dir: /var/www/app
     volumes:
       - ./frontend_app/:/var/www/app:z
-    ports:
-      - "3000:3000"
     networks:
       - app-network
 
@@ -107,7 +71,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./docker/dev/nginx/conf.d/:/etc/nginx/conf.d/:z
+      - ./docker/prod/nginx/conf.d/:/etc/nginx/conf.d/:z
     links:
       - backend_app
       - frontend_app
