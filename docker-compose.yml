@@ -16,7 +16,7 @@ services:
     working_dir: /var/www/app
     volumes:
       - ./backend_app:/var/www/app:z
-      - ./volumes/logs:/var/www/logs:z
+      - ./volumes/logs:/var/www/app/logs:z
     ports:
       - "5000:5000"
     extra_hosts:
@@ -46,6 +46,14 @@ services:
       - blockchain_state:/var/www/blockchain_state
     extra_hosts:
       - "host:host-gateway"
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "2080:8080"
     networks:
       - app-network
 
