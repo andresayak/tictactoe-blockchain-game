@@ -10,6 +10,7 @@ declare const window: any;
 
 declare global {
   interface ProcessEnv {
+    TESTNET_APP_ORIGIN: string;
     BSCMAINNET_PROVIDER_URL: string;
     BSCTESTNET_PROVIDER_URL: string;
   }

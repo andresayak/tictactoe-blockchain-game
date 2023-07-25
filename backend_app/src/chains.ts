@@ -3,8 +3,6 @@ export interface Chain {
   chainName: string;
   isTestChain: boolean;
   isLocalChain: boolean;
-
-
   nativeCurrency?: {
     name: string;
     symbol: string;
